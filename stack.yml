@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  ticker:
+    image: ticker:local
+    build:
+      context: .
+    environment:
+      APP_INFLUXDB_URL: "http://influxdb:8086"
+      APP_INFLUXDB_ORG: "org"
+      APP_INFLUXDB_USER: "admin"
+      APP_INFLUXDB_PASSWORD: ${APP_INFLUXDB_PASSWORD}
+      APP_INFLUXDB_BUCKET: "ticker"
+      APP_INFLUXDB_TOKEN: ${APP_INFLUXDB_TOKEN}
+
+  influxdb:
+    image: influxdb:2.4.0-alpine
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: ${APP_INFLUXDB_USER}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${APP_INFLUXDB_PASSWORD}
+      DOCKER_INFLUXDB_INIT_ORG: ${APP_INFLUXDB_ORG}
+      DOCKER_INFLUXDB_INIT_BUCKET: ${APP_INFLUXDB_BUCKET}
+      DOCKER_INFLUXDB_INIT_RETENTION: "1h"
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${APP_INFLUXDB_TOKEN}
+    ports:
+    - "8086:8086"
+    volumes:
+    - influxdb-data:/var/lib/influxdb2
+    - ./influxdb/init:/docker-entrypoint-initdb.d
+
+volumes:
+  influxdb-data:
