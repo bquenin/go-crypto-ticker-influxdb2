@@ -14,7 +14,7 @@ services:
       APP_INFLUXDB_TOKEN: ${APP_INFLUXDB_TOKEN}
 
   influxdb:
-    image: influxdb:2.4.0-alpine
+    image: influxdb:2.7.1-alpine
     environment:
       DOCKER_INFLUXDB_INIT_MODE: setup
       DOCKER_INFLUXDB_INIT_USERNAME: ${APP_INFLUXDB_USER}
